@@ -1,0 +1,564 @@
+# Copyright (C) 2025 Isreal Consulting, LLC
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: IC HR ERP Extension 1.4.7\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ic-hr-erp-extension\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-11-30T08:26:24+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: ic-hr-erp-extension\n"
+
+#. Plugin Name of the plugin
+#: ic-hr-erp-extension.php
+msgid "IC HR ERP Extension"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: ic-hr-erp-extension.php
+msgid "https://github.com/j-isreal/ic-hr-erp-extension"
+msgstr ""
+
+#. Description of the plugin
+#: ic-hr-erp-extension.php
+msgid "Adds applicant tracking and employee portal to WP ERP Free version. Features include job application forms, employee management, and secure portals."
+msgstr ""
+
+#. Author of the plugin
+#: ic-hr-erp-extension.php
+msgid "Isreal Consulting, LLC"
+msgstr ""
+
+#. Author URI of the plugin
+#: ic-hr-erp-extension.php
+msgid "https://www.icllc.cc/"
+msgstr ""
+
+#: includes/class-admin-interface.php:22
+#: includes/class-admin-interface.php:23
+msgid "HR Management"
+msgstr ""
+
+#: includes/class-admin-interface.php:33
+#: includes/class-admin-interface.php:34
+msgid "Applicants"
+msgstr ""
+
+#: includes/class-admin-interface.php:99
+msgid "HR Management Dashboard"
+msgstr ""
+
+#: includes/class-admin-interface.php:100
+msgid "Welcome to your custom HR management system."
+msgstr ""
+
+#: includes/class-admin-interface.php:103
+#: includes/class-settings.php:357
+msgid "Manage Applicants"
+msgstr ""
+
+#: includes/class-admin-interface.php:104
+msgid "View Employees"
+msgstr ""
+
+#: includes/class-admin-interface.php:148
+msgid "Applicant Management"
+msgstr ""
+
+#: includes/class-admin-interface.php:190
+#: includes/class-admin-interface.php:274
+msgid "Select bulk action"
+msgstr ""
+
+#: includes/class-admin-interface.php:192
+#: includes/class-admin-interface.php:276
+msgid "Bulk Actions"
+msgstr ""
+
+#: includes/class-admin-interface.php:194
+#: includes/class-admin-interface.php:278
+#: includes/class-admin-interface.php:418
+#: includes/class-admin-interface.php:423
+msgid "Approve"
+msgstr ""
+
+#: includes/class-admin-interface.php:195
+#: includes/class-admin-interface.php:279
+#: includes/class-admin-interface.php:419
+#: includes/class-admin-interface.php:421
+msgid "Reject"
+msgstr ""
+
+#: includes/class-admin-interface.php:197
+#: includes/class-admin-interface.php:281
+#: includes/class-admin-interface.php:378
+msgid "Delete"
+msgstr ""
+
+#: includes/class-admin-interface.php:199
+#: includes/class-admin-interface.php:283
+msgid "Apply"
+msgstr ""
+
+#: includes/class-admin-interface.php:205
+#: includes/class-admin-interface.php:288
+msgid "item"
+msgid_plural "items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-admin-interface.php:211
+#: includes/class-admin-interface.php:293
+msgid "&laquo;"
+msgstr ""
+
+#: includes/class-admin-interface.php:212
+#: includes/class-admin-interface.php:294
+msgid "&raquo;"
+msgstr ""
+
+#. translators: %s: Applicant status (pending, approved, rejected, completed)
+#: includes/class-admin-interface.php:231
+#, php-format
+msgid "No %s applicants found."
+msgstr ""
+
+#: includes/class-admin-interface.php:239
+#: includes/class-admin-interface.php:258
+msgid "Select All"
+msgstr ""
+
+#: includes/class-admin-interface.php:242
+#: includes/class-admin-interface.php:261
+msgid "Name"
+msgstr ""
+
+#: includes/class-admin-interface.php:243
+#: includes/class-admin-interface.php:262
+msgid "Email"
+msgstr ""
+
+#: includes/class-admin-interface.php:244
+#: includes/class-admin-interface.php:263
+msgid "Position"
+msgstr ""
+
+#: includes/class-admin-interface.php:245
+#: includes/class-admin-interface.php:264
+msgid "Status"
+msgstr ""
+
+#: includes/class-admin-interface.php:246
+#: includes/class-admin-interface.php:265
+msgid "Date Applied"
+msgstr ""
+
+#: includes/class-admin-interface.php:247
+#: includes/class-admin-interface.php:266
+msgid "Actions"
+msgstr ""
+
+#. translators: %s: Applicant full name
+#: includes/class-admin-interface.php:356
+#, php-format
+msgid "Select %s"
+msgstr ""
+
+#: includes/class-admin-interface.php:368
+msgid "View"
+msgstr ""
+
+#: includes/class-admin-interface.php:377
+msgid "Are you sure you want to delete this applicant?"
+msgstr ""
+
+#: includes/class-admin-interface.php:383
+msgid "Show more details"
+msgstr ""
+
+#: includes/class-admin-interface.php:390
+msgid "Completed"
+msgstr ""
+
+#: includes/class-admin-interface.php:400
+msgid "Create Employee"
+msgstr ""
+
+#: includes/class-admin-interface.php:404
+msgid "Download Resume"
+msgstr ""
+
+#: includes/class-admin-interface.php:407
+msgid "No resume"
+msgstr ""
+
+#: includes/class-admin-interface.php:418
+#: includes/class-admin-interface.php:423
+msgid "Approve this applicant?"
+msgstr ""
+
+#: includes/class-admin-interface.php:419
+#: includes/class-admin-interface.php:421
+msgid "Reject this applicant?"
+msgstr ""
+
+#: includes/class-admin-interface.php:445
+msgid "Applicant Details"
+msgstr ""
+
+#: includes/class-admin-interface.php:450
+msgid "Close"
+msgstr ""
+
+#. translators: %s: Action text (approved, rejected)
+#: includes/class-admin-interface.php:489
+#, php-format
+msgid "Applicant %s successfully."
+msgstr ""
+
+#: includes/class-admin-interface.php:504
+msgid "Applicant deleted successfully."
+msgstr ""
+
+#: includes/class-admin-interface.php:504
+msgid "Failed to delete applicant."
+msgstr ""
+
+#: includes/class-admin-interface.php:525
+msgid "No applicants selected or invalid action."
+msgstr ""
+
+#. translators: %d: Number of applicants approved
+#: includes/class-admin-interface.php:544
+#, php-format
+msgid "Approved %d applicant"
+msgid_plural "Approved %d applicants"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: Number of applicants rejected
+#: includes/class-admin-interface.php:552
+#, php-format
+msgid "Rejected %d applicant"
+msgid_plural "Rejected %d applicants"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: Number of applicants deleted
+#: includes/class-admin-interface.php:558
+#, php-format
+msgid "Deleted %d applicant"
+msgid_plural "Deleted %d applicants"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-admin-interface.php:562
+msgid "Invalid bulk action"
+msgstr ""
+
+#: includes/class-config.php:91
+msgid "Please enter a valid admin notification email address."
+msgstr ""
+
+#: includes/class-config.php:95
+msgid "Please enter a from name for emails."
+msgstr ""
+
+#: includes/class-config.php:99
+msgid "From email is required"
+msgstr ""
+
+#: includes/class-config.php:105
+msgid "Reply-to email is invalid"
+msgstr ""
+
+#: includes/class-config.php:109
+msgid "Company name is required"
+msgstr ""
+
+#: includes/class-settings.php:151
+#: includes/class-settings.php:318
+msgid "IC HR ERP Extension Settings"
+msgstr ""
+
+#: includes/class-settings.php:152
+msgid "Settings"
+msgstr ""
+
+#: includes/class-settings.php:192
+msgid "Email Settings"
+msgstr ""
+
+#: includes/class-settings.php:199
+msgid "General Settings"
+msgstr ""
+
+#: includes/class-settings.php:207
+msgid "Admin Notification Email"
+msgstr ""
+
+#: includes/class-settings.php:215
+msgid "From Name"
+msgstr ""
+
+#: includes/class-settings.php:223
+msgid "From Email"
+msgstr ""
+
+#: includes/class-settings.php:231
+msgid "Reply-To Email"
+msgstr ""
+
+#: includes/class-settings.php:240
+msgid "Company Name"
+msgstr ""
+
+#: includes/class-settings.php:248
+msgid "Minimum Applicant Age"
+msgstr ""
+
+#: includes/class-settings.php:256
+msgid "Maximum File Size"
+msgstr ""
+
+#: includes/class-settings.php:303
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: includes/class-settings.php:309
+msgid "Setup Required:"
+msgstr ""
+
+#: includes/class-settings.php:309
+msgid "Please configure all required settings (marked with"
+msgstr ""
+
+#: includes/class-settings.php:309
+msgid "to complete plugin setup."
+msgstr ""
+
+#: includes/class-settings.php:324
+msgid "Save Settings"
+msgstr ""
+
+#: includes/class-settings.php:331
+msgid "Using Shortcodes"
+msgstr ""
+
+#: includes/class-settings.php:332
+msgid "Add these shortcodes to any page or post to display HR functionality."
+msgstr ""
+
+#: includes/class-settings.php:335
+msgid "Applicant Form"
+msgstr ""
+
+#: includes/class-settings.php:335
+msgid "Displays the job application form for new applicants."
+msgstr ""
+
+#: includes/class-settings.php:337
+msgid "Cloudflare Turnstile CAPTCHA protection"
+msgstr ""
+
+#: includes/class-settings.php:337
+msgid "Automated spam prevention"
+msgstr ""
+
+#: includes/class-settings.php:338
+msgid "File upload for resumes"
+msgstr ""
+
+#: includes/class-settings.php:338
+msgid "PDF only with size validation"
+msgstr ""
+
+#: includes/class-settings.php:339
+msgid "Automatic email notifications"
+msgstr ""
+
+#: includes/class-settings.php:339
+msgid "Both admin and applicant confirmations"
+msgstr ""
+
+#: includes/class-settings.php:343
+msgid "Employee Portal"
+msgstr ""
+
+#: includes/class-settings.php:343
+msgid "Secure portal for employees to access their information."
+msgstr ""
+
+#: includes/class-settings.php:345
+msgid "Requires employee login"
+msgstr ""
+
+#: includes/class-settings.php:345
+msgid "Automatic role-based access control"
+msgstr ""
+
+#: includes/class-settings.php:346
+msgid "Paystub access"
+msgstr ""
+
+#: includes/class-settings.php:346
+msgid "Ready for payroll system integration"
+msgstr ""
+
+#: includes/class-settings.php:347
+msgid "Info updates"
+msgstr ""
+
+#: includes/class-settings.php:347
+msgid "Employees can update their details"
+msgstr ""
+
+#: includes/class-settings.php:352
+msgid "Quick Start Guide"
+msgstr ""
+
+#: includes/class-settings.php:354
+msgid "Configure Settings"
+msgstr ""
+
+#: includes/class-settings.php:354
+msgid "Fill out all required fields on this page (marked with *)"
+msgstr ""
+
+#: includes/class-settings.php:355
+msgid "Create Application Page"
+msgstr ""
+
+#: includes/class-settings.php:355
+msgid "Create a new page and add"
+msgstr ""
+
+#: includes/class-settings.php:355
+#: includes/class-settings.php:356
+msgid "shortcode"
+msgstr ""
+
+#: includes/class-settings.php:356
+msgid "Create Employee Portal"
+msgstr ""
+
+#: includes/class-settings.php:356
+msgid "Create a protected page with"
+msgstr ""
+
+#: includes/class-settings.php:357
+msgid "Use the HR Management → Applicants menu to review applications"
+msgstr ""
+
+#: includes/class-settings.php:358
+msgid "Create Employees"
+msgstr ""
+
+#: includes/class-settings.php:358
+msgid "Convert approved applicants to employees with one click"
+msgstr ""
+
+#: includes/class-settings.php:363
+msgid "Plugin Features"
+msgstr ""
+
+#: includes/class-settings.php:365
+msgid "Complete applicant tracking system with status management"
+msgstr ""
+
+#: includes/class-settings.php:366
+msgid "Secure employee portal with restricted access"
+msgstr ""
+
+#: includes/class-settings.php:367
+msgid "Customizable email notifications in English and Spanish"
+msgstr ""
+
+#: includes/class-settings.php:368
+msgid "Automated employee creation from approved applicants"
+msgstr ""
+
+#: includes/class-settings.php:373
+msgid "Need Help?"
+msgstr ""
+
+#: includes/class-settings.php:374
+msgid "If you need assistance with the plugin setup or usage:"
+msgstr ""
+
+#: includes/class-settings.php:376
+msgid "Check the settings"
+msgstr ""
+
+#: includes/class-settings.php:376
+msgid "Ensure all required settings are properly configured"
+msgstr ""
+
+#: includes/class-settings.php:377
+msgid "Verify shortcode placement"
+msgstr ""
+
+#: includes/class-settings.php:377
+msgid "Make sure shortcodes are placed on the correct pages"
+msgstr ""
+
+#: includes/class-settings.php:378
+msgid "Test the forms"
+msgstr ""
+
+#: includes/class-settings.php:378
+msgid "Submit a test application as a logged-out user"
+msgstr ""
+
+#: includes/class-settings.php:379
+msgid "Check email functionality"
+msgstr ""
+
+#: includes/class-settings.php:379
+msgid "Verify that notification emails are being sent"
+msgstr ""
+
+#: includes/class-settings.php:382
+msgid "Most issues can be resolved by ensuring all required settings are filled out and the shortcodes are properly placed on pages."
+msgstr ""
+
+#: includes/class-settings.php:391
+msgid "Configure email settings for applicant notifications and communications."
+msgstr ""
+
+#: includes/class-settings.php:395
+msgid "General plugin settings and configurations."
+msgstr ""
+
+#: includes/class-settings.php:401
+msgid "Email address where new application notifications will be sent"
+msgstr ""
+
+#: includes/class-settings.php:407
+msgid "Name that appears in the \"From\" field of emails"
+msgstr ""
+
+#: includes/class-settings.php:413
+msgid "Email address that appears in the \"From\" field"
+msgstr ""
+
+#: includes/class-settings.php:419
+msgid "Optional: Email address for replies (uses From email if empty)"
+msgstr ""
+
+#: includes/class-settings.php:425
+msgid "Your company name for email signatures and copyright notices"
+msgstr ""
+
+#: includes/class-settings.php:431
+msgid "Minimum age required for applicants"
+msgstr ""
+
+#: includes/class-settings.php:437
+msgid "Maximum resume file size in megabytes (MB)"
+msgstr ""

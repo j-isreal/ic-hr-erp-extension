@@ -1,0 +1,232 @@
+/* IC Plugin Styles */
+
+/* Applicant Form Styles */
+.form-section { 
+    margin-bottom: 2rem; 
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.form-row { 
+    display: flex; 
+    gap: 1rem; 
+    margin-bottom: 1rem; 
+}
+
+.form-group { 
+    flex: 1; 
+}
+
+.form-group label { 
+    display: block; 
+    margin-bottom: 0.5rem; 
+    font-weight: bold; 
+    color: #333;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea { 
+    width: 100%; 
+    padding: 0.75rem; 
+    border: 1px solid #ddd; 
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus { 
+    border-color: #007cba;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.2);
+}
+
+.success-message { 
+    color: #155724; 
+    padding: 2rem; 
+    background: #d4edda; 
+    border: 2px solid #c3e6cb;
+    border-radius: 8px;
+    margin: 2rem 0;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.error-message { 
+    color: #721c24; 
+    padding: 1.5rem; 
+    background: #f8d7da; 
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    margin: 1rem 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Turnstile Styles */
+.cf-turnstile,
+.cf7-simple-turnstile {
+    margin: 1rem 0;
+}
+
+.turnstile-error {
+    color: #dc3232;
+    padding: 10px;
+    background: #fff0f0;
+    border: 1px solid #dc3232;
+    border-radius: 4px;
+}
+
+/* Employee Portal Styles */
+.employee-portal { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+}
+
+.portal-header { 
+    background: #f8f9fa; 
+    padding: 2rem; 
+    margin-bottom: 2rem; 
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.portal-sections { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 2rem; 
+}
+
+.portal-section { 
+    border: 1px solid #ddd; 
+    padding: 1.5rem; 
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.portal-section h3 { 
+    margin-top: 0; 
+    border-bottom: 2px solid #0073aa; 
+    padding-bottom: 0.5rem; 
+    color: #0073aa;
+}
+
+/* Button Styles */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #007cba;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.button:hover {
+    background: #005a87;
+}
+
+.button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Form Submit Button */
+#submit-application {
+    background: #28a745;
+    color: white;
+    padding: 12px 30px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#submit-application:hover {
+    background: #218838;
+}
+
+#submit-application:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .portal-sections {
+        grid-template-columns: 1fr;
+    }
+    
+    .portal-header {
+        padding: 1rem;
+    }
+}
+
+/* Admin Interface Styles */
+.wp-list-table .check-column {
+    width: 2.2em;
+}
+
+.wp-list-table .row-actions {
+    color: #ddd;
+    font-size: 12px;
+    visibility: hidden;
+}
+
+.wp-list-table tr:hover .row-actions {
+    visibility: visible;
+}
+
+.status-completed {
+    color: #46b450;
+    font-weight: bold;
+}
+
+/* Filter Tabs */
+.wp-filter .filter-links {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.wp-filter .filter-links li {
+    margin: 0;
+}
+
+.wp-filter .filter-links a {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    margin-right: 5px;
+    border-radius: 4px 4px 0 0;
+    background: #f9f9f9;
+}
+
+.wp-filter .filter-links a.current {
+    background: #fff;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+}
+
+.wp-filter .filter-links .count {
+    color: #666;
+    font-weight: normal;
+}
