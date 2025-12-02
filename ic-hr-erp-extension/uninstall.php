@@ -4,40 +4,25 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
 
-// Clean up plugin data
+// Don't run cleanup automatically - user must choose via interface
+// We'll just clean up the minimal stuff that's safe
+
 global $wpdb;
 
-// Get table names with proper prefix
-$icllc_hr_table = $wpdb->prefix . 'icllc_hr_applicants';
-$icllc_hr_docs_table = $wpdb->prefix . 'icllc_hr_documents';
-
-// Validate table names to prevent SQL injection
-$icllc_hr_allowed_tables = [ // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-    $wpdb->prefix . 'icllc_hr_applicants',
-    $wpdb->prefix . 'icllc_hr_documents'
-];
-
-// Only drop tables that are in our allowed list
-if (in_array($icllc_hr_table, $icllc_hr_allowed_tables, true)) {
-    $wpdb->query($wpdb->prepare("DROP TABLE IF EXISTS %s", $icllc_hr_table)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+// Delete the HR Portal page we created
+$icllc_hr_page_id = get_option('icllc_hr_portal_page_id'); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+if ($icllc_hr_page_id) {
+    wp_delete_post($icllc_hr_page_id, true); // true = force delete (bypass trash)
 }
 
-if (in_array($icllc_hr_docs_table, $icllc_hr_allowed_tables, true)) {
-    $wpdb->query($wpdb->prepare("DROP TABLE IF EXISTS %s", $icllc_hr_docs_table)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-}
+// Delete page ID option
+delete_option('icllc_hr_portal_page_id');
 
-// Delete options
-delete_option('icllc_hr_settings');
-delete_option('icllc_hr_version');
-delete_option('icllc_hr_setup_complete');
-
-// Clean up user meta if any
-$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-    $wpdb->prepare(
-        "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s",
-        $wpdb->esc_like('icllc_hr_') . '%'
-    )
-);
+// Delete activation transient if it exists
+delete_transient('icllc_hr_activation_redirect');
 
 // Clear any cached data
 wp_cache_flush();
+
+// That's it! We don't delete tables or settings unless user explicitly chooses to
+// The full cleanup with user choice is done via the settings page option

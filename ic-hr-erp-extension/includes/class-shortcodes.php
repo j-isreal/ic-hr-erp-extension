@@ -20,6 +20,9 @@ class ICLLC_HR_Shortcodes {
             return '<p>You are already logged in. Please log out to submit an application.</p>';
         }
         
+        // Calculate the max date (18 years ago) safely
+        $max_date = gmdate('Y-m-d', strtotime('-18 years'));
+        
         ob_start();
         ?>
         <div id="applicant-form-container">
@@ -46,8 +49,15 @@ class ICLLC_HR_Shortcodes {
                             <input type="email" id="email" name="email" required>
                         </div>
                         <div class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="tel" id="phone" name="phone" required>
+                            <label for="phone">Phone *</label>
+                            <input type="tel" id="phone" name="phone" 
+                                   pattern="\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}" 
+                                   title="Please enter a valid 10-digit phone number (e.g., 123-456-7890)"
+                                   placeholder="123-456-7890"
+                                   required>
+                            <div class="phone-hint" style="font-size: 0.85em; color: #666; margin-top: 4px;">
+                                Format: 123-456-7890
+                            </div>
                         </div>
                     </div>
                     
@@ -117,7 +127,12 @@ class ICLLC_HR_Shortcodes {
                         </div>
                         <div class="form-group">
                             <label for="date_of_birth">Date of Birth *</label>
-                            <input type="date" id="date_of_birth" name="date_of_birth" required>
+                            <input type="date" id="date_of_birth" name="date_of_birth" 
+                                   max="<?php echo esc_attr($max_date); ?>"
+                                   required>
+                            <div class="dob-hint" style="font-size: 0.85em; color: #666; margin-top: 4px;">
+                                Must be 18 years or older
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -171,12 +186,77 @@ class ICLLC_HR_Shortcodes {
         
         <script>
         jQuery(document).ready(function($) {
+            // Phone number formatting
+            $('#phone').on('input', function(e) {
+                var phone = $(this).val().replace(/\D/g, '');
+                if (phone.length >= 6) {
+                    phone = phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+                } else if (phone.length >= 3) {
+                    phone = phone.replace(/(\d{3})(\d+)/, '$1-$2');
+                }
+                $(this).val(phone);
+            });
+
+            // Age validation function
+            function calculateAge(birthDate) {
+                var today = new Date();
+                var birthDate = new Date(birthDate);
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age;
+            }
+
+            // Real-time age validation
+            $('#date_of_birth').on('change', function() {
+                var dob = $(this).val();
+                if (dob) {
+                    var age = calculateAge(dob);
+                    if (age < 18) {
+                        $('#form-message').html('<div class="error-message">You must be at least 18 years old to apply.</div>');
+                        $(this).focus();
+                    } else {
+                        $('#form-message').html('');
+                    }
+                }
+            });
+
+            // Phone validation function
+            function validatePhone(phone) {
+                // Remove all non-digits
+                var cleaned = phone.replace(/\D/g, '');
+                // Check if it's exactly 10 digits
+                return cleaned.length === 10;
+            }
+
+            // Form submission handler
             $('#applicant-form').on('submit', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 
                 // Clear any previous messages
                 $('#form-message').html('');
+                
+                // Validate phone number
+                var phone = $('#phone').val();
+                if (!validatePhone(phone)) {
+                    $('#form-message').html('<div class="error-message">Please enter a valid 10-digit phone number.</div>');
+                    $('#phone').focus();
+                    return false;
+                }
+                
+                // Validate age
+                var dob = $('#date_of_birth').val();
+                if (dob) {
+                    var age = calculateAge(dob);
+                    if (age < 18) {
+                        $('#form-message').html('<div class="error-message">You must be at least 18 years old to apply.</div>');
+                        $('#date_of_birth').focus();
+                        return false;
+                    }
+                }
                 
                 // Check if Turnstile is completed
                 var turnstileResponse = $('[name="cf-turnstile-response"]').val();
@@ -266,6 +346,13 @@ class ICLLC_HR_Shortcodes {
         .form-group input, .form-group select, .form-group textarea { 
             width: 100%; padding: 0.5rem; border: 1px solid #ddd; 
         }
+        input:invalid, select:invalid {
+            border-color: #ff6b6b;
+            background-color: #fff5f5;
+        }
+        input:valid, select:valid {
+            border-color: #51cf66;
+        }
         .success-message { 
            color: green; 
            padding: 2rem; 
@@ -287,6 +374,12 @@ class ICLLC_HR_Shortcodes {
             margin: 1rem 0;
             font-weight: bold;
             text-align: center;
+        }
+        .validation-error {
+            color: #e74c3c;
+            font-size: 0.85em;
+            margin-top: 4px;
+            display: block;
         }
         /* Style for Turnstile widget */
         .cf-turnstile {

@@ -13,6 +13,7 @@ class ICLLC_HR_Settings {
         add_action('admin_init', array($this, 'register_settings'));
         add_action('admin_init', array($this, 'validate_settings_before_save'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_settings_styles'));
+        add_action('admin_init', array($this, 'update_setup_status_on_save'));
     }
     
     public function enqueue_settings_styles($hook) {
@@ -259,6 +260,16 @@ class ICLLC_HR_Settings {
             'icllc_hr_general_section'
         );
     }
+
+    /**
+     * Add uninstall section to settings page
+     */
+    public function render_uninstall_section() {
+        // Only show if uninstall class exists
+        if (class_exists('ICLLC_HR_Uninstall')) {
+            do_action('icllc_hr_settings_uninstall_section');
+        }
+    }
     
     /**
      * Validate settings before they are saved
@@ -310,80 +321,84 @@ class ICLLC_HR_Settings {
             echo '</div>';
         }
         
-    // Check for settings errors
-    settings_errors();
-    ?>
-    <div class="icllc-settings-wrap">
-        <div class="icllc-settings-main">
-            <h1><?php echo esc_html__('IC HR ERP Extension Settings', 'ic-hr-erp-extension'); ?></h1><hr size="1" noshade="noshade">
-            
-            <form method="post" action="options.php">
-                <?php
-                settings_fields($this->config::SETTINGS_GROUP);
-                do_settings_sections($this->config::SETTINGS_PAGE);
-                submit_button(esc_html__('Save Settings', 'ic-hr-erp-extension'));
-                ?>
-            </form>
-        </div>
-        
-        <div class="icllc-settings-sidebar"><br />
-            <div class="icllc-sidebar-section">
-                <h3>📋 <?php echo esc_html__('Using Shortcodes', 'ic-hr-erp-extension'); ?></h3>
-                <p class="shortcode-description"><?php echo esc_html__('Add these shortcodes to any page or post to display HR functionality.', 'ic-hr-erp-extension'); ?></p>
+        // Check for settings errors
+        settings_errors();
+        ?>
+        <div class="icllc-settings-wrap">
+            <div class="icllc-settings-main">
+                <h1><?php echo esc_html__('IC HR ERP Extension Settings', 'ic-hr-erp-extension'); ?></h1><hr size="1" noshade="noshade">
                 
-                <div class="shortcode-example">[applicant_form]</div>
-                <p class="shortcode-description"><strong><?php echo esc_html__('Applicant Form', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Displays the job application form for new applicants.', 'ic-hr-erp-extension'); ?></p>
-                <ul class="feature-list">
-                    <li><strong><?php echo esc_html__('Cloudflare Turnstile CAPTCHA protection', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Automated spam prevention', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('File upload for resumes', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('PDF only with size validation', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Automatic email notifications', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Both admin and applicant confirmations', 'ic-hr-erp-extension'); ?></li>
-                </ul>
+                <form method="post" action="options.php">
+                    <?php
+                    settings_fields($this->config::SETTINGS_GROUP);
+                    do_settings_sections($this->config::SETTINGS_PAGE);
+                    submit_button(esc_html__('Save Settings', 'ic-hr-erp-extension'));
+                    ?>
+                </form>
+                <div class="icllc-settings-section" style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid #ddd;">
+                    <h2><?php echo esc_html__('Advanced Options', 'ic-hr-erp-extension'); ?></h2>
+                    <?php $this->render_uninstall_section(); ?>
+                </div>
+            </div>
+            
+            <div class="icllc-settings-sidebar"><br />
+                <div class="icllc-sidebar-section">
+                    <h3>📋 <?php echo esc_html__('Using Shortcodes', 'ic-hr-erp-extension'); ?></h3>
+                    <p class="shortcode-description"><?php echo esc_html__('Add these shortcodes to any page or post to display HR functionality.', 'ic-hr-erp-extension'); ?></p>
+                    
+                    <div class="shortcode-example">[applicant_form]</div>
+                    <p class="shortcode-description"><strong><?php echo esc_html__('Applicant Form', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Displays the job application form for new applicants.', 'ic-hr-erp-extension'); ?></p>
+                    <ul class="feature-list">
+                        <li><strong><?php echo esc_html__('Cloudflare Turnstile CAPTCHA protection', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Automated spam prevention', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('File upload for resumes', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('PDF only with size validation', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Automatic email notifications', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Both admin and applicant confirmations', 'ic-hr-erp-extension'); ?></li>
+                    </ul>
+                    
+                    <div class="shortcode-example">[employee_portal]</div>
+                    <p class="shortcode-description"><strong><?php echo esc_html__('Employee Portal', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Secure portal for employees to access their information.  Default page created /hr-portal', 'ic-hr-erp-extension'); ?></p>
+                    <ul class="feature-list">
+                        <li><strong><?php echo esc_html__('Requires employee login', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Automatic role-based access control', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Paystub access', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Ready for payroll system integration', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Info updates', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Employees can update their details', 'ic-hr-erp-extension'); ?></li>
+                    </ul>
+                </div>
                 
-                <div class="shortcode-example">[employee_portal]</div>
-                <p class="shortcode-description"><strong><?php echo esc_html__('Employee Portal', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Secure portal for employees to access their information.', 'ic-hr-erp-extension'); ?></p>
-                <ul class="feature-list">
-                    <li><strong><?php echo esc_html__('Requires employee login', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Automatic role-based access control', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Paystub access', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Ready for payroll system integration', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Info updates', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Employees can update their details', 'ic-hr-erp-extension'); ?></li>
-                </ul>
-            </div>
-            
-            <div class="icllc-sidebar-section">
-                <h3>🚀 <?php echo esc_html__('Quick Start Guide', 'ic-hr-erp-extension'); ?></h3>
-                <ol class="feature-list">
-                    <li><strong><?php echo esc_html__('Configure Settings', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Fill out all required fields on this page (marked with *)', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Create Application Page', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Create a new page and add', 'ic-hr-erp-extension'); ?> <code>[applicant_form]</code> <?php echo esc_html__('shortcode', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Create Employee Portal', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Create a protected page with', 'ic-hr-erp-extension'); ?> <code>[employee_portal]</code> <?php echo esc_html__('shortcode', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Manage Applicants', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Use the HR Management → Applicants menu to review applications', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Create Employees', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Convert approved applicants to employees with one click', 'ic-hr-erp-extension'); ?></li>
-                </ol>
-            </div>
-            
-            <div class="icllc-sidebar-section">
-                <h3>🔧 <?php echo esc_html__('Plugin Features', 'ic-hr-erp-extension'); ?></h3>
-                <ul class="feature-list">
-                    <li>✅ <?php echo esc_html__('Complete applicant tracking system with status management', 'ic-hr-erp-extension'); ?></li>
-                    <li>✅ <?php echo esc_html__('Secure employee portal with restricted access', 'ic-hr-erp-extension'); ?></li>
-                    <li>✅ <?php echo esc_html__('Customizable email notifications in English and Spanish', 'ic-hr-erp-extension'); ?></li>
-                    <li>✅ <?php echo esc_html__('Automated employee creation from approved applicants', 'ic-hr-erp-extension'); ?></li>
-                </ul>
-            </div>
-            
-            <div class="icllc-sidebar-section">
-                <h3>📞 <?php echo esc_html__('Need Help?', 'ic-hr-erp-extension'); ?></h3>
-                <p class="shortcode-description"><?php echo esc_html__('If you need assistance with the plugin setup or usage:', 'ic-hr-erp-extension'); ?></p>
-                <ul class="feature-list">
-                    <li><strong><?php echo esc_html__('Check the settings', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Ensure all required settings are properly configured', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Verify shortcode placement', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Make sure shortcodes are placed on the correct pages', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Test the forms', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Submit a test application as a logged-out user', 'ic-hr-erp-extension'); ?></li>
-                    <li><strong><?php echo esc_html__('Check email functionality', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Verify that notification emails are being sent', 'ic-hr-erp-extension'); ?></li>
-                </ul>
-                <p class="shortcode-description" style="margin-top: 1rem; font-style: italic;">
-                    <?php echo esc_html__('Most issues can be resolved by ensuring all required settings are filled out and the shortcodes are properly placed on pages.', 'ic-hr-erp-extension'); ?>
-                </p>
+                <div class="icllc-sidebar-section">
+                    <h3>🚀 <?php echo esc_html__('Quick Start Guide', 'ic-hr-erp-extension'); ?></h3>
+                    <ol class="feature-list">
+                        <li><strong><?php echo esc_html__('Configure Settings', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Fill out all required fields on this page (marked with *)', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Create Application Page', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Create a new page and add', 'ic-hr-erp-extension'); ?> <code>[applicant_form]</code> <?php echo esc_html__('shortcode', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Review Employee Portal', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('The plugin created a protected page with', 'ic-hr-erp-extension'); ?> <code>[employee_portal]</code> <?php echo esc_html__('at /hr-portal with ', 'ic-hr-erp-extension'); ?><?php echo esc_html__('shortcode', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Manage Applicants', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Use the HR Management → Applicants menu to review applications', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Create Employees', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Convert approved applicants to employees with one click', 'ic-hr-erp-extension'); ?></li>
+                    </ol>
+                </div>
+                
+                <div class="icllc-sidebar-section">
+                    <h3>🔧 <?php echo esc_html__('Plugin Features', 'ic-hr-erp-extension'); ?></h3>
+                    <ul class="feature-list">
+                        <li>✅ <?php echo esc_html__('Complete applicant tracking system with status management', 'ic-hr-erp-extension'); ?></li>
+                        <li>✅ <?php echo esc_html__('Secure employee portal with restricted access', 'ic-hr-erp-extension'); ?></li>
+                        <li>✅ <?php echo esc_html__('Customizable email notifications in English and Spanish', 'ic-hr-erp-extension'); ?></li>
+                        <li>✅ <?php echo esc_html__('Automated employee creation from approved applicants', 'ic-hr-erp-extension'); ?></li>
+                    </ul>
+                </div>
+                
+                <div class="icllc-sidebar-section">
+                    <h3>📞 <?php echo esc_html__('Need Help?', 'ic-hr-erp-extension'); ?></h3>
+                    <p class="shortcode-description"><?php echo esc_html__('If you need assistance with the plugin setup or usage:', 'ic-hr-erp-extension'); ?></p>
+                    <ul class="feature-list">
+                        <li><strong><?php echo esc_html__('Check the settings', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Ensure all required settings are properly configured', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Verify shortcode placement', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Make sure shortcodes are placed on the correct pages', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Test the forms', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Submit a test application as a logged-out user', 'ic-hr-erp-extension'); ?></li>
+                        <li><strong><?php echo esc_html__('Check email functionality', 'ic-hr-erp-extension'); ?></strong> - <?php echo esc_html__('Verify that notification emails are being sent', 'ic-hr-erp-extension'); ?></li>
+                    </ul>
+                    <p class="shortcode-description" style="margin-top: 1rem; font-style: italic;">
+                        <?php echo esc_html__('Most issues can be resolved by ensuring all required settings are filled out and the shortcodes are properly placed on pages.', 'ic-hr-erp-extension'); ?>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
         <?php
     }
     
@@ -435,5 +450,31 @@ class ICLLC_HR_Settings {
         $value = get_option('icllc_hr_max_file_size', 5);
         echo '<input type="number" name="icllc_hr_max_file_size" value="' . esc_attr($value) . '" min="1" max="20" class="small-text" required>';
         echo '<p class="description">' . esc_html__('Maximum resume file size in megabytes (MB)', 'ic-hr-erp-extension') . '</p>';
+    }
+
+    /**
+     * Update setup complete status when settings are saved - FIXED VERSION
+     */
+    public function update_setup_status_on_save() {
+        // Check if this is our settings page
+        if (isset($_POST['option_page']) && $_POST['option_page'] === $this->config::SETTINGS_GROUP) {
+            // Verify nonce FIRST - this fixes the nonce verification warning
+            if (!isset($_POST['_wpnonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), $this->config::SETTINGS_GROUP . '-options')) {
+                return;
+            }
+            
+            // Wait a moment for WordPress to save the options
+            add_action('updated_option', function($option, $old_value, $value) {
+                // Check if this is one of our settings
+                if (strpos($option, 'icllc_hr_') === 0) {
+                    // Update setup complete status
+                    if ($this->config::has_required_settings()) {
+                        $this->config::complete_setup();
+                    } else {
+                        update_option($this->config::SETUP_COMPLETE_OPTION, false);
+                    }
+                }
+            }, 10, 3);
+        }
     }
 }

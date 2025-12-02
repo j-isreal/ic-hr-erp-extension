@@ -43,10 +43,28 @@ class ICLLC_HR_Config {
     }
     
     /**
-     * Check if setup is complete
+     * Check if setup is complete - FIXED VERSION
      */
     public static function is_setup_complete() {
-        return get_option(self::SETUP_COMPLETE_OPTION, false);
+        // First check if we have the option explicitly set
+        $setup_complete_option = get_option(self::SETUP_COMPLETE_OPTION, false);
+        
+        // Check if required settings are actually filled
+        $has_required_settings = self::has_required_settings();
+        
+        // If settings are complete but option says incomplete, update it
+        if ($has_required_settings && !$setup_complete_option) {
+            update_option(self::SETUP_COMPLETE_OPTION, true);
+            return true;
+        }
+        
+        // If settings are incomplete but option says complete, update it
+        if (!$has_required_settings && $setup_complete_option) {
+            update_option(self::SETUP_COMPLETE_OPTION, false);
+            return false;
+        }
+        
+        return $setup_complete_option;
     }
     
     /**
@@ -54,6 +72,7 @@ class ICLLC_HR_Config {
      */
     public static function complete_setup() {
         update_option(self::SETUP_COMPLETE_OPTION, true);
+        return true;
     }
     
     /**
@@ -62,10 +81,14 @@ class ICLLC_HR_Config {
     public static function has_required_settings() {
         $settings = self::get_settings();
         
-        return !empty($settings['admin_email']) &&
-               !empty($settings['from_name']) &&
-               !empty($settings['from_email']) &&
-               !empty($settings['company_name']);
+        $has_required = !empty($settings['admin_email']) &&
+                       !empty($settings['from_name']) &&
+                       !empty($settings['from_email']) &&
+                       !empty($settings['company_name']) &&
+                       is_email($settings['admin_email']) &&
+                       is_email($settings['from_email']);
+        
+        return $has_required;
     }
     
     /**
@@ -87,18 +110,18 @@ class ICLLC_HR_Config {
     public static function validate_email_settings($settings) {
         $errors = [];
         
-    if (empty($settings['admin_email']) || !is_email($settings['admin_email'])) {
-        $errors[] = __('Please enter a valid admin notification email address.', 'ic-hr-erp-extension');
-    }
-    
-    if (empty($settings['from_name'])) {
-        $errors[] = __('Please enter a from name for emails.', 'ic-hr-erp-extension');
-    }
+        if (empty($settings['admin_email']) || !is_email($settings['admin_email'])) {
+            $errors[] = __('Please enter a valid admin notification email address.', 'ic-hr-erp-extension');
+        }
+        
+        if (empty($settings['from_name'])) {
+            $errors[] = __('Please enter a from name for emails.', 'ic-hr-erp-extension');
+        }
         
         if (empty($settings['from_email'])) {
             $errors[] = __('From email is required', 'ic-hr-erp-extension');
         } elseif (!is_email($settings['from_email'])) {
-            $errors[] = 'From email is invalid';
+            $errors[] = __('From email is invalid', 'ic-hr-erp-extension');
         }
         
         if (!empty($settings['reply_to_email']) && !is_email($settings['reply_to_email'])) {
