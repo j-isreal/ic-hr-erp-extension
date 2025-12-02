@@ -2,7 +2,9 @@
 Adds applicant tracking and employee portal to WP ERP Free version. Features include bilingual job application form, employee management, and secure portal - plus bilingual automated email responses.
 
 ## Documentation
-https://www.icllc.cc/software/wordpress-plugins/ic-hr-erp-extension/
+Find Wordpress Plugin readme.txt in ic-hr-erp-extension/readme.txt
+
+Official documentation: https://www.icllc.cc/software/wordpress-plugins/ic-hr-erp-extension/
 
 ### Copyright
 
