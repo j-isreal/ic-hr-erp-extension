@@ -4,7 +4,7 @@ Donate link: https://www.icllc.cc/
 Tags: hr, erp, applicant tracking, employee portal, job applications
 Requires at least: 6.2
 Tested up to: 6.8
-Stable tag: 1.4.8
+Stable tag: 1.5.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -57,6 +57,11 @@ Create a new page and add the [applicant_form] shortcode.
 3. Employee portal - Secure portal for employees
 
 == Changelog ==
+
+
+= 1.5.0 =
+* Improved hr-portal
+* Added employee address update
 
 = 1.4.6 =
 * Enhanced error handling and initialization

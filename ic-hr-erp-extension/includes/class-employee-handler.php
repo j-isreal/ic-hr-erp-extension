@@ -75,7 +75,7 @@ class ICLLC_HR_Employee_Handler {
             ));
             
             // Save essential contact information to user meta
-            update_user_meta($user_id, 'phone', $applicant->phone);
+            //update_user_meta($user_id, 'phone', $applicant->phone);
             update_user_meta($user_id, 'mobile', $applicant->phone);
             
             // Save state and address information
@@ -193,17 +193,37 @@ class ICLLC_HR_Employee_Handler {
     }
 }
     
-    private function create_employee_note($user_id, $note) {
+    /**
+     * Check if employee notes table exists
+     */
+    private function employee_notes_table_exists() {
         global $wpdb;
         
         $notes_table = $wpdb->prefix . 'erp_hr_employee_notes';
         
-        // Check if employee notes table exists using prepared statement
-        $table_exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-            $wpdb->prepare("SHOW TABLES LIKE %s", $notes_table)
-        ) === $notes_table;
+        // Check cache first
+        $cache_key = 'icllc_hr_notes_table_exists';
+        $table_exists = wp_cache_get($cache_key);
         
-        if ($table_exists) {
+        if (false === $table_exists) {
+            // Check if employee notes table exists using prepared statement
+            $table_exists = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+                $wpdb->prepare("SHOW TABLES LIKE %s", $notes_table)
+            ) === $notes_table;
+            
+            // Cache the result for 1 hour
+            wp_cache_set($cache_key, $table_exists, '', HOUR_IN_SECONDS);
+        }
+        
+        return $table_exists;
+    }
+
+    private function create_employee_note($user_id, $note) {
+        global $wpdb;
+        
+        // Use the cached table check
+        if ($this->employee_notes_table_exists()) {
+            $notes_table = $wpdb->prefix . 'erp_hr_employee_notes';
             $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
                 $notes_table,
                 array(
@@ -235,7 +255,7 @@ class ICLLC_HR_Employee_Handler {
         if (in_array('employee', $current_user->roles)) {
             // If trying to access admin area, redirect to portal
             if (is_admin() && !wp_doing_ajax()) {
-                wp_safe_redirect(home_url('/hr-portal')); // FIXED: Use wp_safe_redirect
+                wp_safe_redirect(home_url('/hr-portal'));
                 exit;
             }
             
@@ -244,7 +264,7 @@ class ICLLC_HR_Employee_Handler {
             $allowed_slugs = array('hr-portal', 'paystubs', 'employee-documents');
             
             if (!is_front_page() && !in_array($current_slug, $allowed_slugs) && $current_slug) {
-                wp_safe_redirect(home_url('/hr-portal')); // FIXED: Use wp_safe_redirect
+                wp_safe_redirect(home_url('/hr-portal'));
                 exit;
             }
         }
@@ -300,10 +320,228 @@ class ICLLC_HR_Employee_Handler {
     public function display_pending_documents($user_id) {
         echo '<p>No pending documents at this time.</p>';
     }
-    
+
+    /**
+     * Get employee data from wp_usermeta
+     */
+    public function get_employee_usermeta_data($user_id) {
+        // WP ERP usermeta keys - only mobile (no phone)
+        $meta_keys = [
+            'street_1' => 'street_1',
+            'street_2' => 'street_2',
+            'city' => 'city',
+            'state' => 'state',
+            'postal_code' => 'postal_code',
+            'mobile' => 'mobile'  // Only this phone field
+        ];
+        
+        $data = [];
+        
+        foreach ($meta_keys as $key => $meta_key) {
+            $value = get_user_meta($user_id, $meta_key, true);
+            $data[$key] = $value;
+        }
+        
+        return $data;
+    }
+
+    /**
+     * Update employee data in wp_usermeta
+     */
+    public function update_employee_usermeta($user_id, $data) {
+        $updated = false;
+        
+        // Direct meta keys (no prefix) - only mobile
+        $meta_keys = [
+            'street_1' => 'street_1',
+            'street_2' => 'street_2',
+            'city' => 'city',
+            'state' => 'state',
+            'postal_code' => 'postal_code',
+            'mobile' => 'mobile'  // Only this phone field
+        ];
+        
+        foreach ($data as $key => $value) {
+            if (isset($meta_keys[$key])) {
+                $meta_key = $meta_keys[$key];
+                $result = update_user_meta($user_id, $meta_key, $value);
+                
+                if ($result !== false) {
+                    $updated = true;
+                }
+            }
+        }
+        
+        // Log the update
+        if ($updated) {
+            $employee_id = $this->get_employee_id_by_user_id($user_id);
+            $this->log_employee_update($employee_id, $user_id, $data);
+        }
+        
+        return $updated;
+    }
+
+    /**
+     * Get employee ID from wp_erp_hr_employees table using user_id
+     */
+    public function get_employee_id_by_user_id($user_id) {
+        global $wpdb;
+        
+        $employee_id = $wpdb->get_var($wpdb->prepare( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            "SELECT id FROM {$wpdb->prefix}erp_hr_employees WHERE user_id = %d",
+            $user_id
+        ));
+        
+        return $employee_id ? intval($employee_id) : false;
+    }
+
+    /**
+     * Get user_id from wp_erp_hr_employees table using employee_id
+     */
+    public function get_user_id_by_employee_id($employee_id) {
+        global $wpdb;
+        
+        $user_id = $wpdb->get_var($wpdb->prepare( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            "SELECT user_id FROM {$wpdb->prefix}erp_hr_employees WHERE id = %d",
+            $employee_id
+        ));
+        
+        return $user_id ? intval($user_id) : false;
+    }
+
+    /**
+     * Log employee data updates
+     */
+    private function log_employee_update($employee_id, $user_id, $data) {
+        global $wpdb;
+        
+        $log_table = $wpdb->prefix . 'icllc_hr_logs';
+        
+        // Check cache first for table existence
+        $cache_key = 'icllc_hr_logs_table_exists';
+        $table_exists = wp_cache_get($cache_key);
+        
+        if (false === $table_exists) {
+            // Check if log table exists
+            $table_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $log_table)) === $log_table; // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            
+            // Cache the result for 1 hour
+            wp_cache_set($cache_key, $table_exists, '', HOUR_IN_SECONDS);
+        }
+        
+        if (!$table_exists) {
+            // Create log table if it doesn't exist
+            $charset_collate = $wpdb->get_charset_collate();
+            $sql = "CREATE TABLE IF NOT EXISTS $log_table (
+                id bigint(20) NOT NULL AUTO_INCREMENT,
+                employee_id bigint(20) NOT NULL,
+                user_id bigint(20) NOT NULL,
+                action varchar(100) NOT NULL,
+                details text,
+                ip_address varchar(45),
+                user_agent text,
+                created_at datetime DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (id),
+                KEY employee_id (employee_id),
+                KEY user_id (user_id),
+                KEY action (action)
+            ) $charset_collate;";
+            
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            dbDelta($sql);
+            
+            // Update cache since we just created the table
+            wp_cache_set($cache_key, true, '', HOUR_IN_SECONDS);
+        }
+        
+        // Prepare data for logging (don't log full addresses for privacy)
+        $log_data = [
+            'street_1_updated' => !empty($data['street_1']) ? 'YES' : 'NO',
+            'city_updated' => !empty($data['city']) ? 'YES' : 'NO',
+            'state_updated' => !empty($data['state']) ? 'YES' : 'NO',
+            'postal_code_updated' => !empty($data['postal_code']) ? 'YES' : 'NO',
+            'mobile_updated' => !empty($data['mobile']) ? 'YES' : 'NO'
+        ];
+        
+        // Sanitize server variables
+        $ip_address = isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '0.0.0.0';
+        $user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_textarea_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])) : '';
+        
+        $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $log_table,
+            [
+                'employee_id' => $employee_id,
+                'user_id' => $user_id,
+                'action' => 'employee_contact_update',
+                'details' => json_encode($log_data),
+                'ip_address' => $ip_address,
+                'user_agent' => $user_agent,
+                'created_at' => current_time('mysql')
+            ],
+            ['%d', '%d', '%s', '%s', '%s', '%s', '%s']
+        );
+    }
+
+    /**
+     * Get current address information for display
+     */
+    public function get_employee_address_display($user_id) {
+        $data = $this->get_employee_usermeta_data($user_id);
+        
+        $address_lines = [];
+        if (!empty($data['street_1'])) $address_lines[] = esc_html($data['street_1']);
+        if (!empty($data['street_2'])) $address_lines[] = esc_html($data['street_2']);
+        
+        $city_state_zip = [];
+        if (!empty($data['city'])) $city_state_zip[] = esc_html($data['city']);
+        if (!empty($data['state'])) $city_state_zip[] = esc_html($data['state']);
+        if (!empty($data['postal_code'])) $city_state_zip[] = esc_html($data['postal_code']);
+        
+        $output = '';
+        if (!empty($address_lines)) {
+            $output .= implode('<br>', $address_lines);
+        }
+        if (!empty($city_state_zip)) {
+            $output .= (!empty($output) ? '<br>' : '') . implode(', ', $city_state_zip);
+        }
+        
+        return esc_html($output) ?: 'Not provided';
+    }
+
+    /**
+     * Get current mobile number for display
+     */
+    public function get_employee_mobile_display($user_id) {
+        $data = $this->get_employee_usermeta_data($user_id);
+        return !empty($data['mobile']) ? esc_html($data['mobile']) : 'Not provided';
+    }
+
     public function display_employee_info($user_id) {
-       $user = get_userdata($user_id);
-       echo '<p><strong>Email:</strong> ' . esc_html($user->user_email) . '</p>';
-       echo '<p><strong>Joined:</strong> ' . esc_html(gmdate('F j, Y', strtotime($user->user_registered))) . '</p>'; // FIXED: Use gmdate()
+        $user = get_userdata($user_id);
+        
+        // Get employee data
+        $employee_data = $this->get_employee_usermeta_data($user_id);
+        $employee_id = $this->get_employee_id_by_user_id($user_id);
+        
+        echo '<div class="employee-info-display">';
+        echo '<table class="employee-info-table">';
+        echo '<tr><th>Email:</th><td>' . esc_html($user->user_email) . '</td></tr>';
+        
+        if ($employee_id) {
+            echo '<tr><th>Employee ID:</th><td>' . esc_html($employee_id) . '</td></tr>';
+        }
+        
+        echo '<tr><th>Joined:</th><td>' . esc_html(gmdate('F j, Y', strtotime($user->user_registered))) . '</td></tr>';
+        
+        // Display address
+        $address_display = $this->get_employee_address_display($user_id);
+        echo '<tr><th>Address:</th><td>' . esc_html($address_display) . '</td></tr>';
+        
+        // Display mobile
+        $mobile_display = $this->get_employee_mobile_display($user_id);
+        echo '<tr><th>Mobile:</th><td>' . esc_html($mobile_display) . '</td></tr>';
+        
+        echo '</table>';
+        echo '</div>';
     }
 }
