@@ -99,7 +99,7 @@ class ICLLC_HR_Config {
             'admin_applicants' => admin_url('admin.php?page=icllc-hr-applicants&status=pending'),
             'hr_portal' => home_url('/hr-portal'),
             'login' => wp_login_url(),
-            'lost_password' => wp_lostpassword_url(),
+            'lost_password' => home_url('/wp-login.php?action=lostpassword'),
             'settings_page' => admin_url('admin.php?page=' . self::SETTINGS_PAGE),
         ];
     }
