@@ -1,4 +1,6 @@
 # ic-hr-erp-extension
+## latest version 1.5.1
+
 Adds applicant tracking and employee portal to WP ERP Free version. Features include bilingual job application form, employee management, and secure portal - plus bilingual automated email responses.
 
 ## Documentation
