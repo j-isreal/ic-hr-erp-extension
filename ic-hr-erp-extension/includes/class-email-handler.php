@@ -78,7 +78,7 @@ class ICLLC_HR_Email_Handler {
                     
                     <p>Your HR Portal account has been successfully created. You will use this portal to sign important documents, view your paystubs, and keep your personal information up to date.</p>
      
-                    <p>Use your applicant email, ' . esc_html($email) . ' to login. You will need to set your password - see below.</p>
+                    <p>Use your applicant email, ' . esc_html($email) . ' to login. <b>You will need to set your password</b> - see below.</p>
 
                     
                     <p style="text-align: center;">
@@ -87,7 +87,7 @@ class ICLLC_HR_Email_Handler {
                     
                     <p><strong>Portal URL:</strong> ' . esc_url($urls['hr_portal']) . '</p>
                     
-                    <p><b>To set your password,</b> please click the <em><b><a href="' . esc_url($urls['lost_password']) . '">Lost your password?</a></b></em> link under the login box when you first access the portal. Enter the email you used during your application (shown above) and a secure link will be sent to you to set your password.</p>
+                    <p><b>To set your password,</b> please click the <em><b><a href="' . esc_url($urls['lost_password']) . '">Lost your password?</a></b></em> link under the login box when you first access the portal. Enter the email you used during your application (shown above) and a secure link will be sent to you to set your password.  You will then be able to login using your email and new password.</p>
                     
                     <p>If you have any questions or need assistance, please contact the HR department.</p>
                 </div>
@@ -98,7 +98,7 @@ class ICLLC_HR_Email_Handler {
                     
                     <p>Su cuenta del Portal de RH ha sido creada exitosamente. Utilizará este portal para firmar documentos importantes, ver sus talones de pago y mantener su información personal actualizada.</p>
      
-                    <p>Use su correo electrónico de solicitante, ' . esc_html($email) . ' para iniciar sesión. Necesitará establecer su contraseña; consulte a continuación.</p>
+                    <p>Use su correo electrónico de solicitante, ' . esc_html($email) . ' para iniciar sesión. <b>Necesitará establecer su contraseña</b>; consulte a continuación.</p>
 
                     
                     <p style="text-align: center;">
