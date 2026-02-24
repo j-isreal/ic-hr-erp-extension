@@ -4,7 +4,7 @@ Donate link: https://www.icllc.cc/
 Tags: hr, erp, applicant tracking, employee portal, job applications
 Requires at least: 6.2
 Tested up to: 6.8
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -34,7 +34,7 @@ Adds applicant tracking and employee portal to WP ERP Free version.
 
 == Upgrade Notice ==
 
-= 1.4.6 =
+= 1.5.1 =
 * Requires WP ERP Free and Simple Cloudflare Turnstile plugins
 * Enhanced security and error handling
 
@@ -58,6 +58,9 @@ Create a new page and add the [applicant_form] shortcode.
 
 == Changelog ==
 
+
+= 1.5.1 =
+* Updated hr-portal lost password URL to site default (/wp-login.php?action=lostpassword)
 
 = 1.5.0 =
 * Improved hr-portal
