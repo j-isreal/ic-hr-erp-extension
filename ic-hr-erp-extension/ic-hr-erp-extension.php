@@ -3,7 +3,7 @@
  * Plugin Name: IC HR ERP Extension
  * Plugin URI: https://github.com/j-isreal/ic-hr-erp-extension
  * Description: Adds applicant tracking and employee portal to WP ERP Free version. Features include job application form, employee management, and secure portal.
- * Version: 1.5.0
+ * Version: 1.5.1
  * Author: Isreal Consulting, LLC
  * Author URI: https://www.icllc.cc/
  * Text Domain: ic-hr-erp-extension
@@ -18,7 +18,7 @@
 
 /**
 Complete WordPress HR ERP Extension with applicant tracking and employee portal to WP ERP Free version. Features include job application, and secure HR portal.
-Copyright (C) 2025 Isreal Consulting, LLC.
+Copyright (C) 2026 Isreal Consulting, LLC.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ defined('ABSPATH') || exit;
 // Define plugin constants
 define('ICLLC_HR_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ICLLC_HR_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('ICLLC_HR_VERSION', '1.5.0');
+define('ICLLC_HR_VERSION', '1.5.1');
 
 class ICLLC_HR_ERP_Extension {
     
