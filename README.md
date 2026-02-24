@@ -8,7 +8,7 @@ Official documentation: https://www.icllc.cc/software/wordpress-plugins/ic-hr-er
 
 ### Copyright
 
-Copyright (C) 2025 Isreal Consulting, LLC.
+Copyright (C) 2026 Isreal Consulting, LLC.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
